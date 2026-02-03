@@ -31,7 +31,7 @@ function HomeContent() {
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [analyzingIds, setAnalyzingIds] = useState<Set<string>>(new Set());
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const [mobileConnected, setMobileConnected] = useState(false);
   const seenImageIdsRef = useRef<Set<string>>(new Set());
@@ -189,7 +189,7 @@ function HomeContent() {
   }, []);
 
   async function analyzeBatch(batch: UploadedImage[]) {
-    setAnalyzingIds((prev) => new Set([...prev, ...batch.map((i) => i.id)]));
+    setIsAnalyzing(true);
     try {
       const updates = await Promise.all(batch.map(async (item) => {
         const form = new FormData();
@@ -212,11 +212,7 @@ function HomeContent() {
         return u ? { ...img, product: u.product, expiryDate: u.expiryDate, status: u.status } : img;
       }));
     } finally {
-      setAnalyzingIds((prev) => {
-        const next = new Set(prev);
-        batch.forEach((i) => next.delete(i.id));
-        return next;
-      });
+      setIsAnalyzing(false);
     }
   }
 
@@ -326,6 +322,9 @@ function HomeContent() {
                 >
                   Download CSV
                 </button>
+                {isAnalyzing && (
+                  <span className="ml-3 text-xs text-white/80">Analyzing...</span>
+                )}
               </div>
               <div className="overflow-x-auto overflow-y-auto no-scrollbar styled-scrollbar flex-1">
                 <table className="min-w-full text-sm">
@@ -347,21 +346,11 @@ function HomeContent() {
                           </div>
                         </td>
                         <td className="py-3 pr-4 align-middle max-w-[12rem]">
-                          <div className="text-white/95">
-                            {analyzingIds.has(img.id) ? (
-                              <span className="italic text-white/70">Analyzing...</span>
-                            ) : (
-                              img.product || "—"
-                            )}
-                          </div>
+                          <div className="text-white/95">{img.product || "—"}</div>
                         </td>
                         <td className="py-3 pr-4 align-middle">
                           <div className="rounded-md border border-white/20 bg-white/10 px-2 py-1 text-white/90 backdrop-blur">
-                            {analyzingIds.has(img.id) ? (
-                              <span className="italic text-white/70">Analyzing...</span>
-                            ) : (
-                              img.expiryDate || "—"
-                            )}
+                            {img.expiryDate || "—"}
                           </div>
                         </td>
                         <td className="py-3 pr-4 align-middle">
