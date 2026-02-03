@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom scroll helpers */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.styled-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+.styled-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.35);
+  border-radius: 9999px;
+}
+
+.soft-gradient {
+  background:
+    radial-gradient(800px 600px at 30% 30%, rgba(72, 94, 112, 0.35), transparent 60%),
+    radial-gradient(700px 700px at 65% 25%, rgba(58, 90, 120, 0.25), transparent 60%),
+    radial-gradient(900px 700px at 50% 10%, rgba(105, 160, 190, 0.20), transparent 65%),
+    radial-gradient(1000px 800px at 50% 120%, rgba(0, 0, 0, 0.85), rgba(0,0,0,0.95)),
+    linear-gradient(180deg, #0f1418 0%, #0b0f12 100%);
+  background-attachment: fixed;
+}
+
+
